@@ -1,0 +1,20 @@
+{
+  "name": "purescript-xpath",
+  "homepage": "https://github.com/slamdata/purescript-xpath",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/slamdata/purescript-xpath.git"
+  },
+  "ignore": [
+    "**/.*",
+    "bower_components",
+    "node_modules",
+    "output",
+    "bower.json",
+    "package.json"
+  ],
+  "dependencies": {
+    "purescript-lists": "^3.2.1"
+  }
+}
