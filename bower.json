@@ -16,5 +16,9 @@
   ],
   "dependencies": {
     "purescript-lists": "^3.2.1"
+  },
+  "devDependencies": {
+    "purescript-assert": "^2.0.0",
+    "purescript-console": "^2.0.0"
   }
 }
