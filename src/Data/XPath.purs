@@ -15,7 +15,8 @@ limitations under the License.
 -}
 
 module Data.XPath
-  ( module Data.XPath.Annotation
+  ( toUnfoldable
+  , module Data.XPath.Annotation
   , module Data.XPath.Axis
   , module Data.XPath.Function
   , module Data.XPath.Literal
@@ -25,6 +26,9 @@ module Data.XPath
   , module Data.XPath.Types
   ) where
 
+import Data.List as L
+import Data.List.NonEmpty as NEL
+import Data.Unfoldable (class Unfoldable)
 import Data.XPath.Annotation (annotate, (<?>))
 import Data.XPath.Axis (ancestor, ancestorOrSelf, attribute, child, descendant, descendantOrSelf, following, followingSibling, namespace, parent, preceding, precedingSibling, self)
 import Data.XPath.Function (concat, contains, count, ff, normalizeSpace, normalizeSpace', not, position, startsWith, substring, substring', substringAfter, substringBefore, substringLength, substringLength', sum, toString, toString', tt)
@@ -33,3 +37,6 @@ import Data.XPath.NodeTest (comment, node, nodeName, processingInstruction, text
 import Data.XPath.Operator (add, and, divide, equal, greaterThan, greaterThanOrEqual, lessThan, lessThanOrEqual, modulo, multiply, nodeSetUnion, notEqual, or, subtract, (%), (&&), (*), (+), (-), (/), (/=), (<>), (<), (<=), (==), (>), (>=), (||))
 import Data.XPath.Predicate (predicated)
 import Data.XPath.Types (XPath(..), XPathAxis(..), XPathFunction(..), XPathLiteral(..), XPathNodeTest(..), XPathOperator(..), XPathStep(..), printXPath, printXPathAxis, printXPathFunction, printXPathLiteral, printXPathNodeTest, printXPathOperator, printXPathStep, xpath)
+
+toUnfoldable ∷ ∀ f. Unfoldable f ⇒ XPath → f XPathStep
+toUnfoldable (XPath xp) = L.toUnfoldable (L.reverse (NEL.toUnfoldable xp))
