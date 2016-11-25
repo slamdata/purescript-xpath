@@ -59,14 +59,19 @@ derive instance ordXPathStep ∷ Ord XPathStep
 derive instance genericXPathStep ∷ Generic XPathStep
 
 printXPathStep ∷ XPathStep → String
-printXPathStep = case _ of
-  Annotation xp _ → printXPath xp
-  Axis ax xp → printXPathAxis ax <> "::" <> printXPath xp
-  Function xp → printXPathFunction xp
-  Literal lit → printXPathLiteral lit
-  NodeTest nt → printXPathNodeTest nt
-  Operator op lhs rhs → printXPath lhs <> " " <> printXPathOperator op <> " " <> printXPath rhs
-  Predicate path pred → printXPath path <> "[" <> printXPath pred <> "]"
+printXPathStep =
+  case _ of
+    Annotation xp _ → printXPath xp
+    Axis ax xp → printXPathAxis ax <> "::" <> printXPath' xp
+    Function xp → printXPathFunction xp
+    Literal lit → printXPathLiteral lit
+    NodeTest nt → printXPathNodeTest nt
+    Operator op lhs rhs → printXPath' lhs <> " " <> printXPathOperator op <> " " <> printXPath' rhs
+    Predicate path pred → printXPath' path <> "[" <> printXPath pred <> "]"
+  where
+  printXPath' = case _ of
+    xp@(XPath (NonEmptyList (_ :| Nil))) → printXPath xp
+    xp → "(" <> printXPath xp <> ")"
 
 data XPathAxis
   = Ancestor

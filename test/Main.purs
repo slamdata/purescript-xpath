@@ -21,7 +21,7 @@ import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
 import Data.String as Str
 import Data.XPath as X
-import Test.Assert (ASSERT, assert')
+import Test.Assert (ASSERT, assert)
 
 main ∷ Eff (assert ∷ ASSERT, console ∷ CONSOLE) Unit
 main = do
@@ -29,5 +29,16 @@ main = do
     fooBarBaz = X.nodeName "foo" <> X.nodeName "bar" <> X.nodeName "baz"
     unfolded = Str.joinWith "/" $ map X.printXPathStep $ X.toUnfoldable fooBarBaz
     printed = X.printXPath fooBarBaz
+
   log "Testing that unfolding returns the path in left-to-right order"
-  assert' "Unfolded-printed-joined path should equal printed path" (unfolded == printed)
+  assert (unfolded == printed)
+
+  log "Testing that parens are used with indices"
+  assert
+    $ X.printXPath ((X.nodeName "x" <> X.nodeName "y" <> X.nodeName "z") `X.predicated` X.int 1)
+    == "(x/y/z)[1]"
+
+  log "Testing that parens can be avoided with indices"
+  assert
+    $ X.printXPath (X.nodeName "x" <> X.nodeName "y" <> X.nodeName "z" `X.predicated` X.int 1)
+    == "x/y/z[1]"
